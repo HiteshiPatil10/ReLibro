@@ -1,26 +1,44 @@
 "use client";
 export const dynamic = "force-dynamic";
+
 import { useEffect, useState } from "react";
 import { apiRequest } from "@/services/api";
 import { useRouter } from "next/navigation";
 
 export default function AddBook() {
   const router = useRouter();
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     title: "",
     author: "",
     condition: "OLD",
     price: "",
-    mode: "ONLINE"
+    mode: "ONLINE",
   });
 
+  // ✅ THIS WAS MISSING
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setToken(localStorage.getItem("token"));
+    }
+  }, []);
+
   const handleSubmit = async () => {
-    await apiRequest("/books", "POST", {
-      ...form,
-      price: Number(form.price)
-    }, token);
+    if (!token) {
+      alert("Please login again");
+      return;
+    }
+
+    await apiRequest(
+      "/books",
+      "POST",
+      {
+        ...form,
+        price: Number(form.price),
+      },
+      token
+    );
 
     router.push("/books");
   };
@@ -29,18 +47,22 @@ export default function AddBook() {
     <div className="p-6 max-w-md mx-auto">
       <h1 className="text-xl font-bold mb-4">Add Book</h1>
 
-      {["title", "author", "price"].map(key => (
+      {["title", "author", "price"].map((key) => (
         <input
           key={key}
           placeholder={key}
           className="border p-2 w-full mb-3"
-          onChange={e => setForm({ ...form, [key]: e.target.value })}
+          onChange={(e) =>
+            setForm({ ...form, [key]: e.target.value })
+          }
         />
       ))}
 
       <select
         className="border p-2 w-full mb-3"
-        onChange={e => setForm({ ...form, condition: e.target.value })}
+        onChange={(e) =>
+          setForm({ ...form, condition: e.target.value })
+        }
       >
         <option value="NEW">NEW</option>
         <option value="OLD">OLD</option>
@@ -49,7 +71,9 @@ export default function AddBook() {
 
       <select
         className="border p-2 w-full mb-3"
-        onChange={e => setForm({ ...form, mode: e.target.value })}
+        onChange={(e) =>
+          setForm({ ...form, mode: e.target.value })
+        }
       >
         <option value="ONLINE">ONLINE</option>
         <option value="OFFLINE">OFFLINE</option>
