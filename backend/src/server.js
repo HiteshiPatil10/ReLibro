@@ -25,7 +25,6 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.log("DB error ❌", err));
 
 const authRoutes = require("./routes/authRoutes");
-
 app.use("/api/auth", authRoutes);
 
 const testRoutes = require("./routes/testRoutes");
