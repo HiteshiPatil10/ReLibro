@@ -1,0 +1,7 @@
+module.exports = {
+  APP_RATING: 10,
+  SHARE_APP: 20,
+  BOOK_READ: 30,
+  NOTES_UPLOAD: 40,
+  ROUGH_BOOK_SELL: 100
+};
