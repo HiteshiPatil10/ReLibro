@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://relibro-backend.onrender.com/api";
 
 export const apiRequest = async (
   url: string,
